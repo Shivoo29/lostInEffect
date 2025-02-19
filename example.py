@@ -4,6 +4,7 @@ from dilithium.sign import Signer
 from dilithium.verify import Verifier
 import time
 import numpy as np
+from dilithium.chaos import HybridEncryption
 
 def print_key(name: str, key: dict):
     print(f"\n{name}:")
@@ -14,42 +15,40 @@ def print_key(name: str, key: dict):
             print(f"  {k}: {v[:20]}..." if isinstance(v, bytes) else f"  {k}: {v}")
 
 def main():
-    # Initialize with security level 3
+    # Initialize hybrid system
     params = DilithiumParams.get_params(security_level=3)
+    hybrid = HybridEncryption(params)
     
     # Generate keys
     print("\nGenerating keys...")
     start = time.time()
-    keygen = KeyGenerator(params)
-    public_key, private_key = keygen.generate_keypair()
+    public_key, private_key = hybrid.generate_keys()
     print(f"Key generation: {(time.time() - start)*1000:.2f}ms")
     
     # Print keys
     print_key("Public Key", public_key)
     print_key("Private Key", private_key)
     
-    # Create and sign message
+    # Original message
     message = b"Hello, Quantum-Resistant World!"
     print(f"\nOriginal message: {message.decode()}")
     
-    signer = Signer(params)
+    # Encrypt and sign
     start = time.time()
-    signature = signer.sign(message, private_key)
-    print(f"Signing: {(time.time() - start)*1000:.2f}ms")
+    ciphertext, nonce, signature = hybrid.encrypt_and_sign(message, private_key)
+    print(f"Encryption and signing: {(time.time() - start)*1000:.2f}ms")
+    print(f"Ciphertext (hex): {ciphertext.hex()[:50]}...")
+    print(f"Nonce (hex): {nonce.hex()}")
     
-    # Print signature
-    mu, z = signature
-    print("\nSignature:")
-    print(f"  mu: {mu[:20]}...")
-    print(f"  z: array of shape {z.shape}, first few values: {z.flatten()[:5]}")
-    
-    # Verify signature
-    verifier = Verifier(params)
+    # Verify and decrypt
     start = time.time()
-    is_valid = verifier.verify(message, signature, public_key)
-    print(f"Verification: {(time.time() - start)*1000:.2f}ms")
+    decrypted = hybrid.verify_and_decrypt(ciphertext, nonce, signature, public_key)
+    print(f"Verification and decryption: {(time.time() - start)*1000:.2f}ms")
+    print(f"Decrypted message: {decrypted.decode()}")
     
-    print(f"\nSignature valid: {is_valid}")
+    # Verify integrity
+    print("\nVerification summary:")
+    print(f"Message integrity: {message == decrypted}")
 
 if __name__ == "__main__":
     main() 
