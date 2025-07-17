@@ -28,9 +28,9 @@ class SecureBiometricSystem:
                 }
 
         # Behavioral analysis for fingerprint
-        fingerprint_hex = biometric_data.get('fingerprint_hex')
-        if fingerprint_hex:
-            behavioral_analysis = self.behavioral_analytics.analyze_fingerprint_hex(fingerprint_hex)
+        fingerprint_image_path = biometric_data.get('fingerprint_image_path')
+        if fingerprint_image_path:
+            behavioral_analysis = self.behavioral_analytics.analyze_fingerprint_image(fingerprint_image_path)
             results['behavioral_analysis'] = behavioral_analysis
         else:
             behavioral_analysis = {"behavioral_score": 0.5} # Default score if no fingerprint
@@ -83,7 +83,7 @@ if __name__ == "__main__":
 
     biometric_data = {
         'face_image_path': dummy_file_path,
-        'fingerprint_hex': "ABCDEF1234567890" * 32 # A long, repeating hex string
+        'fingerprint_image_path': "/home/skj/Documents/projects/lostInEffect/datasets/Sokoto_conventry_Fingerprint_Dataset/SOCOFing/Real/1__M_Left_index_finger.BMP" # Example image path
     }
 
     context_data = {
