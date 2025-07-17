@@ -108,15 +108,12 @@ class CryptoNetworkProtocol:
             ciphertext = base64.b64decode(data_dict['ciphertext'])
             nonce = base64.b64decode(data_dict['nonce'])
             mu = base64.b64decode(data_dict['mu'])
-            z_bytes = base64.b64decode(data_dict['z'])
-            
-            # Reconstruct z array
-            z = np.frombuffer(z_bytes, dtype=np.int32)
+            z = np.array(data_dict['z'], dtype=np.int32)
             
             # Reconstruct public key
             public_key = {
                 'seed': base64.b64decode(data_dict['public_key']['seed']),
-                't': [np.array(t, dtype=np.int32) for t in data_dict['public_key']['t']]
+                't': np.array(data_dict['public_key']['t'], dtype=np.int32)
             }
             
             components = {

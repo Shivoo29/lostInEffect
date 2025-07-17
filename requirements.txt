@@ -53,3 +53,4 @@ Werkzeug
 #pip install git+https://github.com/soft-matter/pims.git
 
 # ultralytics # YOLOv7
+psutil
