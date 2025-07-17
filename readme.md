@@ -75,3 +75,57 @@ Inspired by Cloudflare’s method of using naturally occurring variables for enc
 By integrating chaos theory with biometric security, we create a **next-generation encryption system** that withstands quantum computing threats while ensuring **biometric authentication remains secure**. This approach is innovative, unpredictable, and adaptable, giving us a strong competitive edge in biometric cybersecurity.
 
 This solution provides a novel way to secure biometric data **beyond traditional cryptographic methods**, ensuring long-term protection against both AI-driven and quantum-based cyber threats.
+
+## **Biometric Security Models CLI**
+
+### **Overview**
+The `biometric_security_models` directory contains various modules for analyzing and defending against biometric threats. A command-line interface (CLI) is provided to interact with these models for testing and demonstration purposes.
+
+### **Usage**
+To use the CLI, navigate to the `biometric_security_models` directory and run the `cli.py` script with the desired command and arguments.
+
+```bash
+cd biometric_security_models/
+python cli.py <command> [arguments]
+```
+
+### **Available Commands**
+
+#### **1. `test-adversarial`**
+Tests the adversarial attack detector. This model analyzes metadata of a given image file to determine if it might be synthetic or an adversarial sample.
+
+-   **Arguments:**
+    -   `--face-image <path_to_image>`: **(Required)** Path to the face image file to be analyzed.
+
+-   **Example:**
+    ```bash
+    python cli.py test-adversarial --face-image ../dummy_face.jpg
+    ```
+
+#### **2. `test-behavioral`**
+Tests the behavioral analytics module. This model analyzes a fingerprint hex string for demonstrable patterns to detect anomalies.
+
+-   **Arguments:**
+    -   `--fingerprint-hex <hex_string>`: **(Required)** Hex string of the fingerprint template.
+
+-   **Example:**
+    ```bash
+    python cli.py test-behavioral --fingerprint-hex "ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789"
+    ```
+
+#### **3. `authenticate`**
+Runs the full multi-modal authentication flow, integrating various biometric security models.
+
+-   **Arguments:**
+    -   `--user-id <user_id>`: **(Required)** The user ID for the authentication attempt.
+    -   `--face-image <path_to_image>`: **(Required)** Path to the face image file.
+    -   `--fingerprint-hex <hex_string>`: **(Required)** Hex string of the fingerprint template.
+    -   `--location-change`: (Optional) Flag to indicate a change in location (adds to risk score).
+    -   `--device-change`: (Optional) Flag to indicate a change in device (adds to risk score).
+    -   `--network-change`: (Optional) Flag to indicate a change in network (adds to risk score).
+    -   `--failed-attempts <number>`: (Optional) Number of recent failed authentication attempts (adds to risk score).
+
+-   **Example:**
+    ```bash
+    python cli.py authenticate --user-id "test_user" --face-image ../dummy_face.jpg --fingerprint-hex "ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789" --location-change --failed-attempts 2
+    ```
